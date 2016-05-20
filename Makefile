@@ -8,13 +8,13 @@ BUILD_DIR=build
 all: $(BUILD_DIR)/SiteVision.docset
 
 $(BUILD_DIR)/javadocset: $(BUILD_DIR)/javadocset.zip | $(BUILD_DIR)
-	unzip -oq $< -d $(BUILD_DIR)
+	unzip -nq $< -d $(BUILD_DIR) && touch $@
 
 $(BUILD_DIR)/javadocset.zip: | $(BUILD_DIR)
 	curl -so $@ $(JAVADOCSET_URL)
 
-$(BUILD_DIR)/apidocs: $(BUILD_DIR)/apidocs.zip | $(BUILD_DIR)
-	unzip -oq $< -d $(BUILD_DIR)
+$(BUILD_DIR)/apidocs/: $(BUILD_DIR)/apidocs.zip | $(BUILD_DIR)
+	unzip -nq $< -d $(BUILD_DIR)
 
 $(BUILD_DIR)/apidocs.zip: | $(BUILD_DIR)
 	curl -s $(SITEVISION_API_URL) | grep -Eoi '[^"]+\.zip' | awk '{ print "$(SITEVISION_API_BASE_URL)" $$1 }' | xargs curl -so $@
