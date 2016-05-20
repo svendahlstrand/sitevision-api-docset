@@ -1,23 +1,24 @@
 SITEVISION_API_BASE_URL=http://help.sitevision.se/webdav/files/apidocs/
 SITEVISION_API_URL=$(SITEVISION_API_BASE_URL)overview-summary.html
 JAVADOCSET_URL=http://kapeli.com/javadocset.zip
+BUILD_DIR=build
 
-all: SiteVision.docset
+all: $(BUILD_DIR)/SiteVision.docset
 
-javadocset: javadocset.zip
-	unzip -oq $<
+$(BUILD_DIR)/javadocset: $(BUILD_DIR)/javadocset.zip
+	unzip -oq $< -d $(BUILD_DIR)
 
-javadocset.zip:
-	curl -sO $(JAVADOCSET_URL)
+$(BUILD_DIR)/javadocset.zip:
+	curl -so $@ $(JAVADOCSET_URL)
 
-apidocs: apidocs.zip
-	unzip -oq $<
+$(BUILD_DIR)/apidocs: $(BUILD_DIR)/apidocs.zip
+	unzip -oq $< -d $(BUILD_DIR)
 
-apidocs.zip: javadocset
-	curl -s $(SITEVISION_API_URL) | grep -Eoi '[^"]+\.zip' | awk '{ print "$(SITEVISION_API_BASE_URL)" $$1 }' | xargs curl -so apidocs.zip
+$(BUILD_DIR)/apidocs.zip:
+	curl -s $(SITEVISION_API_URL) | grep -Eoi '[^"]+\.zip' | awk '{ print "$(SITEVISION_API_BASE_URL)" $$1 }' | xargs curl -so $@
 
-SiteVision.docset: apidocs
-	./javadocset SiteVision apidocs/
+$(BUILD_DIR)/SiteVision.docset: $(BUILD_DIR)/javadocset $(BUILD_DIR)/apidocs
+	$< SiteVision $(word 2,$^) && mv SiteVision.docset $@
 
 clean:
-	rm -rf javadocset* apidocs* __MACOSX SiteVision.docset
+	rm -rf build
