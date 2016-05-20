@@ -3,6 +3,8 @@ SITEVISION_API_URL=$(SITEVISION_API_BASE_URL)overview-summary.html
 JAVADOCSET_URL=http://kapeli.com/javadocset.zip
 BUILD_DIR=build
 
+.PHONY: all clean
+
 all: $(BUILD_DIR)/SiteVision.docset
 
 $(BUILD_DIR)/javadocset: $(BUILD_DIR)/javadocset.zip | $(BUILD_DIR)
