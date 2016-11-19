@@ -1,6 +1,6 @@
 # SiteVision API Dash Documentation Set
 
-A simple makefile to [generate a Documentation Set][1] for use in the OS X and iOS app [Dash][2].
+A simple makefile to generate a SiteVision API [Docset][1] for use in the macOS app [Dash][2].
 
 ![](images/dash-example.png)
 
